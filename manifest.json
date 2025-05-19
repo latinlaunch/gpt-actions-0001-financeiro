@@ -1,0 +1,17 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "Financeiro GPT",
+  "name_for_model": "financeiroGPT",
+  "description_for_human": "Consulta ações, lê planilhas do Google Sheets e gera relatórios em PDF.",
+  "description_for_model": "Consulta dados financeiros de ações com SerpAPI, lê Google Sheets e gera relatórios PDF com HTML.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://latinlaunch.github.io/gpt-actions-0001-financeiro/openapi.yaml",
+    "has_user_authentication": true
+  },
+  "contact_email": "info@latinlaunch.com",
+  "legal_info_url": "https://latinlaunch.com/termos"
+}

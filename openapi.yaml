@@ -1,27 +1,12 @@
-{
-  "schema_version": "v1",
-  "name_for_human": "Financeiro GPT",
-  "name_for_model": "financeiroGPT",
-  "description_for_human": "Consulta ações, lê planilhas do Google Sheets e gera relatórios em PDF.",
-  "description_for_model": "Consulta dados financeiros de ações com SerpAPI, lê Google Sheets e gera relatórios PDF com HTML.",
-  "auth": {
-    "type": "none"
-  },
-  "api": {
-    "type": "openapi",
-    "url": "https://seu-servidor.com/openapi.yaml",
-    "has_user_authentication": true
-  },
-  "contact_email": "info@latinlaunch.com",
-  "legal_info_url": "https://latinlaunch.com/termos"
-}
 openapi: 3.1.0
 info:
-  title: Google Finance via SerpAPI
+  title: Ações Financeiras e PDF
   version: 1.0.0
-  description: Retorna dados financeiros de ações usando a engine do Google Finance da SerpAPI.
+  description: API que une Google Finance via SerpAPI, Google Sheets e PDFShift para relatórios.
 servers:
   - url: https://serpapi.com
+  - url: https://sheets.googleapis.com
+  - url: https://api.pdfshift.io/v3
 paths:
   /search:
     get:
@@ -52,22 +37,8 @@ paths:
             application/json:
               schema:
                 type: object
-                description: Informações como preço, volume, histórico e variação
       security:
         - bearerAuth: []
-components:
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-openapi: 3.1.0
-info:
-  title: Google Sheets Reader
-  version: 1.0.0
-  description: Lê dados de uma planilha do Google Sheets via API oficial.
-servers:
-  - url: https://sheets.googleapis.com
-paths:
   /v4/spreadsheets/{spreadsheetId}/values/{range}:
     get:
       operationId: lerPlanilha
@@ -102,24 +73,6 @@ paths:
                         type: string
       security:
         - oauth2: []
-components:
-  securitySchemes:
-    oauth2:
-      type: oauth2
-      flows:
-        authorizationCode:
-          authorizationUrl: https://accounts.google.com/o/oauth2/v2/auth
-          tokenUrl: https://oauth2.googleapis.com/token
-          scopes:
-            https://www.googleapis.com/auth/spreadsheets.readonly: Permite leitura de planilhas
-openapi: 3.1.0
-info:
-  title: Conversor de HTML para PDF (PDFShift)
-  version: 1.0.0
-  description: Converte conteúdo HTML em PDF usando a API do PDFShift.
-servers:
-  - url: https://api.pdfshift.io/v3
-paths:
   /convert/html:
     post:
       operationId: gerarPdf
@@ -144,11 +97,21 @@ paths:
                 properties:
                   url:
                     type: string
-                    description: URL para download do PDF
       security:
         - basicAuth: []
 components:
   securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+    oauth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://accounts.google.com/o/oauth2/v2/auth
+          tokenUrl: https://oauth2.googleapis.com/token
+          scopes:
+            https://www.googleapis.com/auth/spreadsheets.readonly: Leitura de planilhas
     basicAuth:
       type: http
       scheme: basic
